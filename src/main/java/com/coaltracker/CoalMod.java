@@ -40,6 +40,11 @@ public class CoalMod implements ClientModInitializer {
 							nextScreen = MenuScreen::new;
 							return 1;
 						})
+						.then(ClientCommands.literal("reset").executes(context -> {
+							Tracker.SESSION.reset();
+							context.getSource().sendFeedback(Component.literal("[Coal Tracker] Session reset. Total collection kept."));
+							return 1;
+						}))
 						.then(ClientCommands.literal("debug").executes(context -> {
 							Minecraft.getInstance().keyboardHandler.setClipboard(Tracker.debugText());
 							context.getSource().sendFeedback(Component.literal("[Coal Tracker] Debug text copied."));

@@ -17,6 +17,7 @@ and put `coaltracker-1.0.0.jar` (not the `-sources` one) in your `mods` folder.
 
 ## Use
 - `/coaltracker` opens the menu: craft choice, price mode, own prices, total collection, pause, reset, GUI on/off, move GUI.
+- `/coaltracker reset` resets the session (session coal, time and money). Total collection and settings are kept.
 - `/coaltracker debug` copies the last 5 sack messages to the clipboard.
 - Turn on sack notifications in SkyBlock settings. The GUI appears after the first coal is counted.
 
