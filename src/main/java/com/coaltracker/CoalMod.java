@@ -27,7 +27,10 @@ public class CoalMod implements ClientModInitializer {
 		});
 		ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> Tracker.SESSION.breakStretch());
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
-			if (client.player != null) Prices.refreshIfOld(System.currentTimeMillis());
+			if (client.player != null) {
+				Prices.refreshIfOld(System.currentTimeMillis());
+				Tracker.readMenu(client);
+			}
 			// Opened on the next tick, otherwise closing the chat would close it too.
 			if (nextScreen != null) {
 				client.setScreen(nextScreen.get());

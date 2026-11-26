@@ -13,8 +13,8 @@ import net.minecraft.network.chat.Component;
 /** The /coaltracker menu. */
 public class MenuScreen extends Screen {
 	private static final int WIDTH = 220;
-	private static final int ROW = 24;
-	private static final int TOP = 26;
+	private static final int ROW = 22;
+	private static final int TOP = 24;
 
 	public MenuScreen() {
 		super(Component.literal("Coal Tracker"));
@@ -59,7 +59,12 @@ public class MenuScreen extends Screen {
 			this.rebuildWidgets();
 		});
 		button("Move GUI", left + half + 4, row(6), half, () -> this.minecraft.setScreen(new MoveScreen()));
-		button("Done", this.width / 2 - 50, row(7), 100, this::onClose);
+		button("Ability popup: " + (config.abilityPopup ? "On" : "Off"), left, row(7), WIDTH, () -> {
+			config.abilityPopup = !config.abilityPopup;
+			Config.save();
+			this.rebuildWidgets();
+		});
+		button("Done", this.width / 2 - 50, row(8), 100, this::onClose);
 	}
 
 	private static int row(int index) {
@@ -122,7 +127,7 @@ public class MenuScreen extends Screen {
 			label(graphics, "E.Sulphur: " + shown(Prices.buy(CraftTarget.SULPHUR_ID)), left, row(3));
 		}
 		label(graphics, "Total collection", left, row(4));
-		graphics.centeredText(this.font, "Price boxes: leave empty to use the bazaar", this.width / 2, row(8), 0xFFAAAAAA);
+		graphics.centeredText(this.font, "Price boxes: leave empty to use the bazaar", this.width / 2, row(9), 0xFFAAAAAA);
 	}
 
 	private void label(GuiGraphicsExtractor graphics, String text, int x, int y) {

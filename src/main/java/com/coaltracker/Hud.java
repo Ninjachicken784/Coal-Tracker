@@ -17,6 +17,8 @@ import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements;
 public final class Hud {
 	private static final int WHITE = 0xFFFFFFFF;
 	private static final int GOLD = 0xFFFFAA00;
+	private static final int RED = 0xFFFF0000;
+	private static final float POPUP_SCALE = 3.0f;
 
 	private Hud() { }
 
@@ -25,6 +27,25 @@ public final class Hud {
 				VanillaHudElements.SUBTITLES,
 				Identifier.fromNamespaceAndPath("coaltracker", "hud"),
 				Hud::render);
+		HudElementRegistry.attachElementAfter(
+				VanillaHudElements.SUBTITLES,
+				Identifier.fromNamespaceAndPath("coaltracker", "ability"),
+				Hud::renderAbility);
+	}
+
+	/** Big red text that stays until the ability is used. Works even with the small GUI off. */
+	private static void renderAbility(GuiGraphicsExtractor graphics, DeltaTracker deltaTracker) {
+		Minecraft mc = Minecraft.getInstance();
+		String ability = Tracker.ABILITY.ready();
+		if (mc.player == null || ability == null || !Config.get().abilityPopup) return;
+		String text = ability.toUpperCase(Locale.ROOT) + " READY!";
+		// Shrinks only if the screen is too narrow for the full size.
+		float scale = Math.min(POPUP_SCALE, (float) (graphics.guiWidth() - 8) / mc.font.width(text));
+		graphics.pose().pushMatrix();
+		graphics.pose().translate(graphics.guiWidth() / 2.0f, graphics.guiHeight() / 4.0f);
+		graphics.pose().scale(scale, scale);
+		graphics.centeredText(mc.font, text, 0, 0, RED);
+		graphics.pose().popMatrix();
 	}
 
 	private static void render(GuiGraphicsExtractor graphics, DeltaTracker deltaTracker) {
@@ -47,7 +68,8 @@ public final class Hud {
 		String status = Tracker.paused ? " (paused)" : session.idle(System.currentTimeMillis()) ? " (idle)" : "";
 		return new String[] {
 			"Coal Tracker" + status,
-			"Collection: " + (total >= 0 ? number(total) + " (+" + number(coal) + ")" : "+" + number(coal)),
+			"Collection: " + (total >= 0 ? number(total) : "open Coal Collection"),
+			"Gained: +" + number(coal),
 			"Collection/h: " + (rate < 0 ? "--" : number(Math.round(rate))),
 			"Crafting: " + target.display + " (" + String.format(Locale.US, "%,.1f", target.items(coal)) + ")",
 			"Money: " + (priced ? number(Math.round(money)) : "no price yet"),

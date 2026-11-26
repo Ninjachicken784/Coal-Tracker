@@ -51,6 +51,21 @@ public class CoalLogicTest {
 		session.reset();
 		check(session.coal() == 0 && session.activeMs() == 0, "reset");
 
+		List<String> item = List.of("Coal X", "View all your Coal Collection", "progress and rewards!", "", "Total Collected: 70,931,544");
+		check(CollectionMenu.read(item) == 70_931_544L, "menu total");
+		check(CollectionMenu.read(List.of("Coal 5", "Total Collected: 5")) == -1, "other item");
+		check(CollectionMenu.read(List.of("Coal X", "Progress")) == -1, "no total line");
+
+		AbilityAlert alert = new AbilityAlert();
+		alert.chat("Player: Maniac Miner is now available!");
+		check(alert.ready() == null, "player chat");
+		alert.chat("\u00a7r\u00a76Maniac Miner \u00a7r\u00a7ais now available!\u00a7r");
+		check("Maniac Miner".equals(alert.ready()), "ready");
+		alert.chat("You earned 730 GEXP");
+		check(alert.ready() != null, "stays");
+		alert.chat("You used your Maniac Miner Pickaxe Ability!");
+		check(alert.ready() == null, "used");
+
 		System.out.println("All " + checks + " checks passed.");
 	}
 }

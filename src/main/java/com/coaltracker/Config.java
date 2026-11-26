@@ -17,10 +17,12 @@ public final class Config {
 	public boolean showHud = true;
 	public int hudX = 4;
 	public int hudY = 40;
+	/** Big red text while a mining ability is ready. */
+	public boolean abilityPopup = true;
 	public CraftTarget target = CraftTarget.ENCHANTED_COAL;
 	/** true: sell instantly and buy sulphur instantly. false: sell offer and buy order. */
 	public boolean instantPrices = true;
-	/** Total coal collection, -1 until the player types it in. */
+	/** Total coal collection, -1 until read from the menu or typed in. */
 	public long collection = -1;
 	/** Prices typed in by hand, by bazaar id. These replace the bazaar price. */
 	public Map<String, Double> manualPrices = new HashMap<>();
